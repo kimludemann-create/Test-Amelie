@@ -187,13 +187,13 @@ function FlashcardSection({ mod }: { mod: Mod }) {
     <div>
       <h3 className="font-bold text-lg mb-3">Faguttrykk – Flashcards</h3>
       <p className="text-sm text-gray-500 mb-4">{idx + 1} / {mod.terms.length}</p>
-      <div className={`cursor-pointer rounded-2xl p-8 text-center shadow-md border-2 ${mod.border} ${mod.bg} min-h-[140px] flex items-center justify-center`} onClick={() => setFlipped(f => !f)}>
+      <div className={`cursor-pointer rounded-2xl p-8 text-center shadow-md border-2 transition-all select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 active:scale-95 ${mod.border} ${mod.bg} min-h-[140px] flex items-center justify-center`} onClick={() => setFlipped(f => !f)} onTouchEnd={(e) => (e.currentTarget as HTMLDivElement).blur?.()}>
         {!flipped ? <span className="text-2xl font-bold">{card.term}</span> : <span className="text-base text-gray-700">{card.def}</span>}
       </div>
       <p className="text-xs text-center text-gray-400 mt-2">Trykk for å snu kortet</p>
       <div className="flex gap-3 mt-4 justify-center">
-        <button className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 font-medium" onClick={() => { setIdx(i => (i - 1 + mod.terms.length) % mod.terms.length); setFlipped(false); }}>← Forrige</button>
-        <button className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 font-medium" onClick={() => { setIdx(i => (i + 1) % mod.terms.length); setFlipped(false); }}>Neste →</button>
+        <button className="px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 font-medium transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 active:scale-95" onClick={() => { setIdx(i => (i - 1 + mod.terms.length) % mod.terms.length); setFlipped(false); }} onTouchEnd={(e) => e.currentTarget.blur()}>← Forrige</button>
+        <button className="px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 font-medium transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 active:scale-95" onClick={() => { setIdx(i => (i + 1) % mod.terms.length); setFlipped(false); }} onTouchEnd={(e) => e.currentTarget.blur()}>Neste →</button>
       </div>
     </div>
   );
@@ -213,7 +213,7 @@ function QuizSection({ mod, onComplete }: { mod: Mod; onComplete?: (pct: number)
         <p className="text-3xl font-bold text-center mb-1">{correct} / {mod.quiz.length}</p>
         <p className="text-center text-gray-600 mb-3">{pct}% riktige</p>
         {showGrade && <div className="mt-4 text-center"><span className="text-5xl font-black">{grade}</span><span className="text-gray-500 ml-2">/ 6</span></div>}
-        <div className="flex justify-center mt-3"><button className="text-sm underline text-gray-500" onClick={() => setShowGrade(g => !g)}>{showGrade ? "Skjul karakter" : "Vis karakter"}</button></div>
+        <div className="flex justify-center mt-3"><button className="text-sm underline text-gray-500 transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 active:opacity-70" onClick={() => setShowGrade(g => !g)} onTouchEnd={(e) => e.currentTarget.blur()}>{showGrade ? "Skjul karakter" : "Vis karakter"}</button></div>
       </div>
       <h4 className="font-semibold mb-3">Fasit</h4>
       {mod.quiz.map((q, i) => (
@@ -223,7 +223,7 @@ function QuizSection({ mod, onComplete }: { mod: Mod; onComplete?: (pct: number)
           {answers[i] !== q.ans && <p className="text-sm text-green-700">✓ Riktig: {q.opts[q.ans]}</p>}
         </div>
       ))}
-      <button className={`mt-3 w-full py-2 rounded-xl text-white font-semibold ${mod.accent}`} onClick={() => { setAnswers({}); setSubmitted(false); }}>Ta quizen på nytt</button>
+      <button className={`mt-3 w-full py-3 rounded-xl text-white font-semibold transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 active:scale-95 ${mod.accent}`} onClick={() => { setAnswers({}); setSubmitted(false); }} onTouchEnd={(e) => e.currentTarget.blur()}>Ta quizen på nytt</button>
     </div>
   );
   return (
@@ -234,12 +234,12 @@ function QuizSection({ mod, onComplete }: { mod: Mod; onComplete?: (pct: number)
           <p className="font-medium mb-2">{i + 1}. {q.q}</p>
           <div className="grid grid-cols-1 gap-2">
             {q.opts.map((opt, j) => (
-              <button key={j} className={`text-left px-4 py-2 rounded-xl border text-sm transition-all ${answers[i] === j ? `${mod.bg} ${mod.border} font-semibold` : "bg-white border-gray-200 hover:border-gray-400"}`} onClick={() => setAnswers(a => ({ ...a, [i]: j }))}>{opt}</button>
+              <button key={j} className={`text-left px-4 py-3 rounded-xl border text-sm transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 ${answers[i] === j ? `${mod.bg} ${mod.border} font-semibold focus:ring-current` : "bg-white border-gray-200 hover:border-gray-400 active:border-gray-300 focus:ring-gray-300"}`} onClick={() => setAnswers(a => ({ ...a, [i]: j }))} onTouchEnd={(e) => e.currentTarget.blur()}>{opt}</button>
             ))}
           </div>
         </div>
       ))}
-      <button className={`w-full py-3 rounded-xl text-white font-bold ${Object.keys(answers).length < mod.quiz.length ? "bg-gray-300 cursor-not-allowed" : mod.accent}`} disabled={Object.keys(answers).length < mod.quiz.length} onClick={() => { setSubmitted(true); onComplete?.(pct); }}>
+      <button className={`w-full py-3 rounded-xl text-white font-bold transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 active:scale-95 ${Object.keys(answers).length < mod.quiz.length ? "bg-gray-300 cursor-not-allowed active:scale-100" : mod.accent}`} disabled={Object.keys(answers).length < mod.quiz.length} onClick={() => { setSubmitted(true); onComplete?.(pct); }} onTouchEnd={(e) => !e.currentTarget.disabled && e.currentTarget.blur()}>
         {Object.keys(answers).length < mod.quiz.length ? `Svar på alle (${Object.keys(answers).length}/${mod.quiz.length})` : "Lever quiz"}
       </button>
     </div>
@@ -253,7 +253,7 @@ function ExperimentsSection({ mod }: { mod: Mod }) {
       <h3 className="font-bold text-lg mb-4">Praktiske forsøk</h3>
       {mod.experiments.map((exp, i) => (
         <div key={i} className={`mb-3 border rounded-xl overflow-hidden ${mod.border}`}>
-          <button className={`w-full text-left px-4 py-3 font-semibold flex justify-between items-center ${mod.bg}`} onClick={() => setOpen(open === i ? null : i)}>
+          <button className={`w-full text-left px-4 py-3 font-semibold flex justify-between items-center transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 active:opacity-80 ${mod.bg}`} onClick={() => setOpen(open === i ? null : i)} onTouchEnd={(e) => e.currentTarget.blur()}>
             <span>🔬 {exp.title}</span><span>{open === i ? "▲" : "▼"}</span>
           </button>
           {open === i && <div className="px-4 py-3 bg-white"><p className="text-sm text-gray-700 mb-3">{exp.desc}</p><p className="text-xs font-bold uppercase text-gray-500 mb-1">Utstyr:</p><ul className="list-disc list-inside text-sm text-gray-600">{exp.materials.map((m, j) => <li key={j}>{m}</li>)}</ul></div>}
@@ -273,7 +273,7 @@ function TasksSection({ mod }: { mod: Mod }) {
         <div key={i} className={`mb-4 p-4 rounded-xl border ${mod.border} ${mod.bg}`}>
           <p className="font-medium text-sm mb-3">{i + 1}. {t.q}</p>
           <textarea className="w-full border border-gray-300 rounded-lg p-2 text-sm min-h-[80px] resize-y" placeholder="Skriv svaret ditt her..." value={answers[i] || ""} onChange={e => setAnswers(a => ({ ...a, [i]: e.target.value }))} />
-          <button className={`mt-2 text-sm px-3 py-1 rounded-lg text-white ${mod.accent}`} onClick={() => setSaved(s => ({ ...s, [i]: true }))}>Lagre svar</button>
+          <button className={`mt-2 text-sm px-3 py-2 rounded-lg text-white transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 active:scale-95 ${mod.accent}`} onClick={() => setSaved(s => ({ ...s, [i]: true }))} onTouchEnd={(e) => e.currentTarget.blur()}>Lagre svar</button>
           {saved[i] && <p className="text-xs text-green-600 mt-1">✓ Lagret!</p>}
         </div>
       ))}
@@ -286,14 +286,14 @@ function ModulePage({ mod, progress, onProgress, onBack }: { mod: Mod; progress:
   const [tab, setTab] = useState(0);
   return (
     <div className="max-w-xl mx-auto px-4 py-6">
-      <button className="text-sm text-gray-500 mb-4" onClick={onBack}>← Tilbake</button>
+      <button className="text-sm text-gray-500 mb-4 transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 active:opacity-70" onClick={onBack} onTouchEnd={(e) => e.currentTarget.blur()}>← Tilbake</button>
       <div className={`rounded-2xl p-5 text-white bg-gradient-to-br ${mod.color} mb-5`}>
         <div className="text-4xl mb-1">{mod.icon}</div>
         <h2 className="text-2xl font-bold">{mod.title}</h2>
         <div className="mt-3"><ProgressBar value={progress} max={100} white /><p className="text-xs opacity-70 mt-1">{progress}% fullført</p></div>
       </div>
       <div className="flex gap-2 mb-5 overflow-x-auto">
-        {tabs.map((t, i) => <button key={i} className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${tab === i ? `${mod.accent} text-white` : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`} onClick={() => setTab(i)}>{t}</button>)}
+        {tabs.map((t, i) => <button key={i} className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 active:scale-95 ${tab === i ? `${mod.accent} text-white focus:ring-opacity-50` : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`} onClick={() => setTab(i)} onTouchEnd={(e) => e.currentTarget.blur()}>{t}</button>)}
       </div>
       <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
         {tab === 0 && <FlashcardSection mod={mod} />}
@@ -320,7 +320,7 @@ function Dashboard({ progress, onSelect }: { progress: Record<string, number>; o
         {modules.map(mod => {
           const p = progress[mod.id] || 0;
           return (
-            <button key={mod.id} className={`text-left rounded-2xl p-4 bg-gradient-to-br ${mod.color} text-white shadow-md hover:scale-105 transition-transform`} onClick={() => onSelect(mod.id)}>
+            <button key={mod.id} className={`text-left rounded-2xl p-4 bg-gradient-to-br ${mod.color} text-white shadow-md hover:scale-105 transition-all cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 active:scale-95`} onClick={() => onSelect(mod.id)} onTouchEnd={(e) => e.currentTarget.blur()}>
               <div className="text-3xl mb-2">{mod.icon}</div>
               <p className="font-bold text-sm">{mod.title}</p>
               <div className="mt-2"><ProgressBar value={p} max={100} white /><p className="text-xs opacity-70 mt-1">{p}%</p></div>
